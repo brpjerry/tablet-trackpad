@@ -1,0 +1,84 @@
+name: Release
+
+# Push a tag named after the app's versionName, e.g. v0.1.0, to publish that version.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+env:
+  # The release key's certificate. Every release must be signed with it, or installed copies
+  # cannot update; the build stops if the secrets hold any other key.
+  RELEASE_CERT_SHA256: ee32e6fa3a31c3d5dd543fa04e37294b8762f733671fcecce3ac46cbe8b87496
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    name: Sign and publish
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+
+      - name: Check the tag matches the app version
+        run: |
+          version=$(sed -n 's/^ *versionName = "\(.*\)"$/\1/p' app/build.gradle.kts)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match versionName $version in app/build.gradle.kts"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Build the signed release APK
+        env:
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          # A PKCS12 keystore's key shares the store's password.
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: tablet-trackpad
+        run: |
+          export RELEASE_KEYSTORE="$RUNNER_TEMP/release.jks"
+          trap 'rm -f "$RELEASE_KEYSTORE"' EXIT
+          printf '%s' "$RELEASE_KEYSTORE_BASE64" | base64 -d > "$RELEASE_KEYSTORE"
+          ./gradlew :app:assembleRelease
+
+      - name: Check the signature
+        run: |
+          apksigner="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)/apksigner"
+          "$apksigner" verify --print-certs app/build/outputs/apk/release/app-release.apk | tee signer.txt
+          if ! grep -q "certificate SHA-256 digest: $RELEASE_CERT_SHA256" signer.txt; then
+            echo "::error::The APK is not signed with the release key"
+            exit 1
+          fi
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir dist
+          cp app/build/outputs/apk/release/app-release.apk "dist/tablet-trackpad-$VERSION.apk"
+          (cd dist && sha256sum -- * > SHA256SUMS)
+          fingerprint=$(echo "$RELEASE_CERT_SHA256" | tr a-f A-F | sed 's/../&:/g; s/:$//')
+          cat > notes.md <<EOF
+          **Install:** open \`tablet-trackpad-$VERSION.apk\` on the tablet, or run \`adb install tablet-trackpad-$VERSION.apk\`, then follow the setup in the app. Android blocks accessibility for apps installed from a file until you allow restricted settings; setup walks you through that.
+
+          **Verify:** \`sha256sum -c SHA256SUMS\` checks the download. The APK is signed with the release certificate whose SHA-256 fingerprint is \`$fingerprint\`.
+          EOF
+          gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --title "Tablet Trackpad $VERSION" \
+            --notes-file notes.md --generate-notes

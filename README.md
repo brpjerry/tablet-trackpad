@@ -1,5 +1,7 @@
 # Tablet Trackpad
 
+[![CI](https://github.com/brpjerry/tablet-trackpad/actions/workflows/ci.yml/badge.svg)](https://github.com/brpjerry/tablet-trackpad/actions/workflows/ci.yml)
+
 Use a large Android tablet with one hand. Tablet Trackpad puts a small translucent trackpad where
 your hand already is and moves a cursor over the whole screen, so you can reach every corner
 without shifting your grip or switching hands. It helps whenever one hand is all you have free, and
@@ -72,9 +74,14 @@ the licenses.
 
 ## Install and set up
 
-Build the APK (see [Building](#building)) and install it, for example with
-`adb install app/build/outputs/apk/debug/app-debug.apk`. The first launch opens a short setup,
-which can be rerun from Settings → Setup guide:
+Download the APK from the [latest release](https://github.com/brpjerry/tablet-trackpad/releases/latest)
+and open it on the tablet, or install it with `adb install tablet-trackpad-<version>.apk`. Releases
+are signed with the certificate whose SHA-256 fingerprint is
+`EE:32:E6:FA:3A:31:C3:D5:DD:54:3F:A0:4E:37:29:4B:87:62:F7:33:67:1F:CE:CC:E3:AC:46:CB:E8:B8:74:96`,
+and each release lists the APK's checksum in `SHA256SUMS`. You can also build it yourself (see
+[Building](#building)).
+
+The first launch opens a short setup, which can be rerun from Settings → Setup guide:
 
 1. **Turn on the service.** Opens Accessibility settings (highlighting the entry on stock Android)
    with the steps for the device: on Galaxy devices, Installed apps → Tablet Trackpad → switch on →
@@ -117,8 +124,9 @@ either if it is missing.
 ```
 
 Point Gradle at the SDK with `ANDROID_HOME` or a `local.properties` file containing
-`sdk.dir=/path/to/Android/Sdk`. `./gradlew :app:assembleRelease` builds an unsigned release APK;
-sign it with your own key to install it.
+`sdk.dir=/path/to/Android/Sdk`. `./gradlew :app:assembleRelease` builds an unsigned release APK
+unless a signing key is supplied; [docs/releasing.md](docs/releasing.md) covers signing and how
+releases are published. CI runs the tests, lint and a debug build on every push and pull request.
 
 For working against a connected device:
 
