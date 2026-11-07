@@ -3,7 +3,8 @@
 Unit tests run with `./gradlew :app:testDebugUnitTest`. `core/` and the live scroll, drag and
 pinch classes run on the JVM against a fake `Injector` and a manual clock. `GestureInjectorTest`
 runs the real injector under Robolectric with Android 16's own stroke and gesture classes,
-recording only what reaches `dispatchGesture`.
+recording only what reaches `dispatchGesture`. `SettingsScreenTest` renders the settings screen
+under Robolectric with Compose's test rule and checks the About and privacy card and its links.
 
 ## Verified on a tablet
 

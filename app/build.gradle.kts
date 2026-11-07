@@ -23,7 +23,11 @@ android {
     }
 
     // The injection classes log through android.util.Log, which the JVM tests only have as stubs.
-    testOptions { unitTests.isReturnDefaultValues = true }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+        // Lets Robolectric see the merged manifest, where Compose's test activity is declared.
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 kotlin {
@@ -45,6 +49,8 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     testImplementation(libs.junit)
-    // Runs GestureInjector against the real stroke and gesture classes.
+    // Runs GestureInjector against the real stroke and gesture classes, and the screens under Compose's test rule.
     testImplementation(libs.robolectric)
+    testImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

@@ -119,6 +119,7 @@ fun SettingsScreen(settings: TrackpadSettings, onRunSetup: (fromService: Boolean
                     HelpCard(revision)
                     DiagnosticsCard()
                 }
+                AboutCard()
             }
         }
     }

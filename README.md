@@ -1,14 +1,17 @@
 # Tablet Trackpad
 
-A translucent on-screen trackpad for Android tablets. It moves a virtual cursor and turns
-laptop-style trackpad gestures into touches at the cursor: click, drag, scroll with momentum,
-pinch to zoom and three-finger swipes. Swipe in from a screen edge to show or hide it; drag its top
-bar to move it.
+Use a large Android tablet with one hand. Tablet Trackpad puts a small translucent trackpad where
+your hand already is and moves a cursor over the whole screen, so you can reach every corner
+without shifting your grip or switching hands. It helps whenever one hand is all you have free, and
+it is made with people who don't have full use of one hand in mind.
 
-It runs as an accessibility service, which lets it draw over other apps, inject gestures and
-trigger Back, Home and Recents without any other permission. It does not read screen content and
-has no network access. Its settings stay on the device: they are left out of Android's backups and
-device-to-device transfers.
+The pad works like a laptop's: tap to click, drag, scroll with momentum, pinch to zoom and swipe
+with three fingers for Back, Home and Recents. Swipe in from a screen edge to show or hide it, drag
+its top bar to move it, and drag its corner to resize it.
+
+It runs as an accessibility service, which is how Android lets an app draw over other apps and
+touch the screen for you. It does not read what is on your screen and collects no data; see
+[Privacy](#privacy).
 
 Requires Android 12 or later. It was built for and tested on a Galaxy Tab S9 Ultra (Android 16).
 
@@ -63,8 +66,9 @@ live scroll, drag and pinch, the scroll zone, the three-finger actions, and the 
 
 The color picker has presets including the system theme color, hue, saturation and brightness,
 and hex. The overlays change as you edit; Cancel restores the previous color. **Diagnostics**
-shows recent events, and **Test area** has targets for every gesture plus a monitor of the touch
-events it receives.
+shows recent events, **Test area** has targets for every gesture plus a monitor of the touch
+events it receives, and **About and privacy** covers what the app accesses, the privacy policy and
+the licenses.
 
 ## Install and set up
 
@@ -84,6 +88,12 @@ which can be rerun from Settings → Setup guide:
    and a link to the test area.
 
 Each step shows when it is already done and moves on by itself once it is completed.
+
+## Privacy
+
+Tablet Trackpad collects no data. It has no internet access, never reads what is on your screen,
+and keeps its settings on the device, out of Android's backups and device-to-device transfers. The
+full policy is in [PRIVACY.md](PRIVACY.md), and the same summary is in Settings → About and privacy.
 
 ## How it works
 
@@ -150,3 +160,6 @@ This program is free software: you can redistribute it and/or modify it under th
 General Public License, version 3, as published by the Free Software Foundation. It is distributed
 in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See [LICENSE](LICENSE) for the full text.
+
+The app is built with AndroidX, Jetpack Compose and the Kotlin libraries, which are licensed under
+the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
