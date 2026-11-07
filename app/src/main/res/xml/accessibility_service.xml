@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- No accessibility events or window content: the service only draws overlays and injects
+     gestures. -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault"
+    android:canPerformGestures="true"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/service_description"
+    android:isAccessibilityTool="true"
+    android:notificationTimeout="0"
+    android:settingsActivity="dev.tablettrackpad.settings.SettingsActivity"
+    android:summary="@string/service_summary" />

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A trackpad with a cursor, inside the 66dp safe zone of the 108dp adaptive icon canvas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#E8EEFF"
+        android:strokeWidth="3"
+        android:pathData="M30,36 h48 a6,6 0 0 1 6,6 v26 a6,6 0 0 1 -6,6 h-48 a6,6 0 0 1 -6,-6 v-26 a6,6 0 0 1 6,-6 z" />
+    <path
+        android:fillColor="#E8EEFF"
+        android:pathData="M46,40 h16 a2,2 0 0 1 0,4 h-16 a2,2 0 0 1 0,-4 z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#1C2B4A"
+        android:strokeWidth="1.5"
+        android:pathData="M50,48 L50,68 L54.8,63.5 L58.2,71.2 L61.3,69.9 L58,62.4 L64.4,62.4 Z" />
+</vector>

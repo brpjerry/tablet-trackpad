@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tablet Trackpad</string>
+    <string name="playground_name">Trackpad test area</string>
+    <string name="tile_label">Trackpad</string>
+    <string name="view_row">View row %1$d</string>
+    <string name="service_summary">On-screen trackpad with a virtual cursor</string>
+    <string name="service_description">Shows a translucent trackpad over other apps. It moves a virtual cursor and turns taps and swipes on the pad into touches at the cursor. Swipe in from a screen edge to show or hide it. The service does not read screen content.</string>
+</resources>
